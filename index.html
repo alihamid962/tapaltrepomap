@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapal Tea Previous Branches Map</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([31.5204, 74.3587], 10);  // Centered on Lahore
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var locations = {
+            "samnabad": [31.5107, 74.3239],
+            "shahdra": [31.5825, 74.3041],
+            "sharaqpur": [31.4669, 74.1053],
+            "Saddar-Cantt": [31.5339, 74.3564],
+            "Gulberg Lahore": [31.5146, 74.3435]
+        };
+
+        var teaData = [
+            {
+                flavor: "Vital",
+                before: ["samnabad", "shahdra", "sharaqpur"]
+            },
+            {
+                flavor: "Meezan Tea",
+                before: ["shahdra", "sharaqpur"]
+            },
+            {
+                flavor: "Green Leaf",
+                before: ["Saddar-Cantt", "Gulberg Lahore"]
+            },
+            {
+                flavor: "Taj Mahal Tea",
+                before: ["Saddar-Cantt", "Gulberg Lahore"]
+            },
+            {
+                flavor: "Shahi Chai",
+                before: ["Saddar-Cantt", "Gulberg Lahore"]
+            },
+            {
+                flavor: "Super Sharp",
+                before: ["Gulberg Lahore"]
+            }
+        ];
+
+        function addMarkers(branches, color, flavor) {
+            branches.forEach(function(branch) {
+                if (locations[branch]) {
+                    var marker = L.circleMarker(locations[branch], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.8,
+                        radius: 8
+                    }).addTo(map);
+                    marker.bindPopup(flavor + " - " + branch + " (Previous)");
+                }
+            });
+        }
+
+        teaData.forEach(function(tea) {
+            addMarkers(tea.before, 'darkblue', tea.flavor);
+        });
+    </script>
+</body>
+</html>
